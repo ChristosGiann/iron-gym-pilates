@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Iron Gym Pilates</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+  <style>
+    :root {
+      --black: #111;
+      --red: #d62828;
+      --light: #f9f9f9;
+    }
+
+    body {
+      background-color: var(--black);
+      color: var(--light);
+      scroll-behavior: smooth;
+    }
+
+    nav {
+      background-color: rgba(0, 0, 0, 0.9);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      padding: 0.5rem 2rem;
+      border-bottom: 2px solid var(--red);
+    }
+
+    nav strong {
+      color: var(--red);
+    }
+
+    header {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: linear-gradient(135deg, var(--black), #300);
+      color: var(--light);
+    }
+
+    header h1 {
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+      letter-spacing: 2px;
+    }
+
+    header p {
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+      color: #ddd;
+    }
+
+    header a.button {
+      background-color: var(--red);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 5px;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+
+    header a.button:hover {
+      background-color: #ff3b3b;
+    }
+
+    section {
+      padding: 6rem 1rem;
+      text-align: center;
+    }
+
+    section:nth-of-type(even) {
+      background-color: #1b1b1b;
+    }
+
+    h2 {
+      color: var(--red);
+      margin-bottom: 1rem;
+    }
+
+    footer {
+      background-color: #000;
+      color: #aaa;
+      padding: 2rem;
+      text-align: center;
+      border-top: 2px solid var(--red);
+    }
+
+    footer a {
+      color: var(--red);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Smooth fade effect for scroll sections */
+    [data-fade] {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.8s ease-out;
+    }
+
+    [data-fade].visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <ul>
+      <li><strong>Iron Gym Pilates</strong></li>
+    </ul>
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#class">Class</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero Section -->
+  <header>
+    <h1>Iron Gym Pilates</h1>
+    <p>Ενέργεια. Ισορροπία. Δύναμη.</p>
+    <a href="booking.html" class="button">Κλείσε Θέση</a>
+  </header>
+
+  <!-- About Section -->
+  <section id="about" data-fade>
+    <h2>Σχετικά με εμάς</h2>
+    <p>Το Iron Gym Pilates είναι ο χώρος όπου το σώμα και το μυαλό ευθυγραμμίζονται. Με σύγχρονο εξοπλισμό και έμπειρους instructors, προσφέρουμε μαθήματα Pilates που θα σε βοηθήσουν να βρεις δύναμη, σταθερότητα και ευεξία.</p>
+  </section>
+
+  <!-- Class Section -->
+  <section id="class" data-fade>
+    <h2>Το Μάθημά μας</h2>
+    <p>Το βασικό μας μάθημα Pilates εστιάζει στη σωστή στάση, στον έλεγχο της αναπνοής και στην ενεργοποίηση του πυρήνα. Κατάλληλο για όλα τα επίπεδα φυσικής κατάστασης.</p>
+    <a href="booking.html" class="button">Κλείσε Θέση</a>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" data-fade>
+    <h2>Επικοινωνία</h2>
+    <p>📍 Λεωφόρος Υγείας 21, Αθήνα</p>
+    <p>📞 210 123 4567</p>
+    <p>📧 info@irongympilates.gr</p>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 Iron Gym Pilates • <a href="#">Όροι Χρήσης</a></p>
+  </footer>
+
+  <script>
+    // Fade-in scroll animation
+    const fadeEls = document.querySelectorAll("[data-fade]");
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add("visible");
+      });
+    });
+    fadeEls.forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>

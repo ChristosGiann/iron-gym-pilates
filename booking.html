@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Κλείσε Θέση | Iron Gym Pilates</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+  <style>
+    :root {
+      --black: #111;
+      --red: #d62828;
+      --light: #f9f9f9;
+    }
+
+    body {
+      background-color: var(--black);
+      color: var(--light);
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    nav {
+      background-color: rgba(0,0,0,0.9);
+      border-bottom: 2px solid var(--red);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      padding: 0.5rem 2rem;
+    }
+
+    main {
+      padding-top: 6rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    header h1 {
+      color: var(--red);
+      margin-bottom: 0.5rem;
+    }
+
+    /* Calendar Layout */
+    .calendar-container {
+      background-color: #1b1b1b;
+      border-radius: 10px;
+      padding: 1rem;
+      overflow-x: auto;
+    }
+
+    .calendar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .calendar-header h2 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+
+    .calendar-header button {
+      background-color: var(--red);
+      border: none;
+      color: #fff;
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .calendar-header button:hover {
+      background-color: #ff3b3b;
+    }
+
+    .days-row {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+      background-color: #222;
+      padding: 0.5rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+
+    .days-row div {
+      padding: 0.5rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .days-row div:hover {
+      background-color: #333;
+    }
+
+    .days-row .today {
+      background-color: var(--red);
+      color: white;
+    }
+
+    /* Time Grid */
+    .time-grid {
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      gap: 0.5rem;
+    }
+
+    .times {
+      display: flex;
+      flex-direction: column;
+      text-align: right;
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+
+    .times div {
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 0.5rem;
+      border-bottom: 1px solid #333;
+    }
+
+    .slots {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .slot {
+      height: 60px;
+      border-bottom: 1px solid #333;
+      background-color: #181818;
+      border-radius: 4px;
+      margin-bottom: 4px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .slot:hover {
+      background-color: #2c2c2c;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: #aaa;
+      border-top: 2px solid var(--red);
+      margin-top: 3rem;
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <ul>
+      <li><strong>Iron Gym Pilates</strong></li>
+    </ul>
+    <ul>
+      <li><a href="index.html">Αρχική</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <header>
+      <h1>Κράτηση Θέσης</h1>
+      <p>Επίλεξε μέρα και ώρα για το μάθημά σου</p>
+    </header>
+
+    <div class="calendar-container">
+      <div class="calendar-header">
+        <button id="prevDay">←</button>
+        <h2 id="currentDate">Σήμερα</h2>
+        <button id="nextDay">→</button>
+      </div>
+
+      <div class="days-row" id="daysRow"></div>
+
+      <div class="time-grid">
+        <div class="times" id="timesColumn"></div>
+        <div class="slots" id="slotsColumn"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <small>© 2025 Iron Gym Pilates</small>
+  </footer>
+
+  <script>
+    // Generate horizontal days
+    const daysRow = document.getElementById('daysRow');
+    const timesColumn = document.getElementById('timesColumn');
+    const slotsColumn = document.getElementById('slotsColumn');
+    const currentDateLabel = document.getElementById('currentDate');
+    const prevDayBtn = document.getElementById('prevDay');
+    const nextDayBtn = document.getElementById('nextDay');
+
+    let today = new Date();
+    let currentStartDate = new Date(today);
+
+    function renderDays(startDate) {
+      daysRow.innerHTML = '';
+      for (let i = 0; i < 7; i++) {
+        const day = new Date(startDate);
+        day.setDate(startDate.getDate() + i);
+        const dayDiv = document.createElement('div');
+        dayDiv.textContent = day.toLocaleDateString('el-GR', { weekday: 'short', day: 'numeric' });
+        if (i === 0) dayDiv.classList.add('today');
+        daysRow.appendChild(dayDiv);
+      }
+      currentDateLabel.textContent = startDate.toLocaleDateString('el-GR', { month: 'long', year: 'numeric' });
+    }
+
+    function renderTimes() {
+      timesColumn.innerHTML = '';
+      slotsColumn.innerHTML = '';
+      for (let hour = 9; hour <= 21; hour++) {
+        const timeDiv = document.createElement('div');
+        timeDiv.textContent = `${hour}:00`;
+        timesColumn.appendChild(timeDiv);
+
+        const slotDiv = document.createElement('div');
+        slotDiv.classList.add('slot');
+        slotsColumn.appendChild(slotDiv);
+      }
+    }
+
+    prevDayBtn.addEventListener('click', () => {
+      currentStartDate.setDate(currentStartDate.getDate() - 7);
+      renderDays(currentStartDate);
+    });
+
+    nextDayBtn.addEventListener('click', () => {
+      currentStartDate.setDate(currentStartDate.getDate() + 7);
+      renderDays(currentStartDate);
+    });
+
+    renderDays(currentStartDate);
+    renderTimes();
+  </script>
+
+</body>
+</html>

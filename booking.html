@@ -29,15 +29,14 @@
     }
 
     main {
-      padding-top: 6rem;
+      padding-top: 8rem; /* αυξήθηκε για να κατέβει πιο κάτω */
       max-width: 1000px;
       margin: 0 auto;
     }
 
-    /* Header */
     header {
       text-align: center;
-      margin-bottom: 2rem;
+      margin-bottom: 2.5rem;
     }
 
     header h1 {
@@ -69,14 +68,20 @@
       background-color: var(--red);
       border: none;
       color: #fff;
-      padding: 0.3rem 0.6rem;
+      padding: 0.2rem 0.5rem; /* μικρότερα βελάκια */
       border-radius: 4px;
       cursor: pointer;
       transition: background 0.3s;
+      font-size: 0.8rem;
     }
 
-    .calendar-header button:hover {
+    .calendar-header button:hover:enabled {
       background-color: #ff3b3b;
+    }
+
+    .calendar-header button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
 
     .days-row {
@@ -195,7 +200,6 @@
   </footer>
 
   <script>
-    // Generate horizontal days
     const daysRow = document.getElementById('daysRow');
     const timesColumn = document.getElementById('timesColumn');
     const slotsColumn = document.getElementById('slotsColumn');
@@ -204,6 +208,7 @@
     const nextDayBtn = document.getElementById('nextDay');
 
     let today = new Date();
+    today.setHours(0, 0, 0, 0);
     let currentStartDate = new Date(today);
 
     function renderDays(startDate) {
@@ -213,10 +218,12 @@
         day.setDate(startDate.getDate() + i);
         const dayDiv = document.createElement('div');
         dayDiv.textContent = day.toLocaleDateString('el-GR', { weekday: 'short', day: 'numeric' });
-        if (i === 0) dayDiv.classList.add('today');
+        if (day.getTime() === today.getTime()) dayDiv.classList.add('today');
         daysRow.appendChild(dayDiv);
       }
       currentDateLabel.textContent = startDate.toLocaleDateString('el-GR', { month: 'long', year: 'numeric' });
+      // Disable prev if startDate <= today
+      prevDayBtn.disabled = startDate <= today;
     }
 
     function renderTimes() {

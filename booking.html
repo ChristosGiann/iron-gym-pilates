@@ -4,22 +4,35 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Κλείσε Θέση | Iron Gym Pilates</title>
+
+  <!-- Pico CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+
   <style>
+    /* Βασικά χρώματα */
     :root {
       --black: #111;
       --red: #d62828;
       --light: #f9f9f9;
     }
 
-    body {
-      background-color: var(--black);
-      color: var(--light);
-      font-family: 'Segoe UI', sans-serif;
+    /* Γενικές ρυθμίσεις σελίδας */
+    html,
+    body,
+    main {
+      background-color: var(--black) !important;
     }
 
+    body {
+      color: var(--light);
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Κύριο navigation */
     nav {
-      background-color: rgba(0,0,0,0.9);
+      background-color: rgba(0, 0, 0, 0.9);
       border-bottom: 2px solid var(--red);
       position: fixed;
       width: 100%;
@@ -28,10 +41,11 @@
       padding: 0.5rem 2rem;
     }
 
+    /* Κύριο περιεχόμενο */
     main {
-      padding-top: 8rem; /* αυξήθηκε για να κατέβει πιο κάτω */
-      max-width: 1000px;
-      margin: 0 auto;
+      max-width: 1200px;
+      margin: 6rem auto 0;
+      padding-top: 0;
     }
 
     header {
@@ -42,37 +56,47 @@
     header h1 {
       color: var(--red);
       margin-bottom: 0.5rem;
+      font-size: 2rem;
     }
 
-    /* Calendar Layout */
+    header p {
+      font-size: 1rem;
+      color: #ccc;
+    }
+
+    /* Περιοχή ημερολογίου */
     .calendar-container {
       background-color: #1b1b1b;
       border-radius: 10px;
-      padding: 1rem;
+      padding: 1.5rem;
       overflow-x: auto;
+      max-width: 1100px;
+      margin: 4rem auto 0;
     }
 
+    /* Header ημερολογίου (βελάκια + μήνας) */
     .calendar-header {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: center;
+      gap: 0.5rem;
       margin-bottom: 1rem;
-    }
-
-    .calendar-header h2 {
-      margin: 0;
-      font-size: 1.2rem;
     }
 
     .calendar-header button {
       background-color: var(--red);
       border: none;
       color: #fff;
-      padding: 0.2rem 0.5rem; /* μικρότερα βελάκια */
-      border-radius: 4px;
+      width: 34px;
+      height: 34px;
+      border-radius: 6px;
       cursor: pointer;
       transition: background 0.3s;
-      font-size: 0.8rem;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0; /* ακύρωση default margin */
     }
 
     .calendar-header button:hover:enabled {
@@ -84,49 +108,55 @@
       cursor: not-allowed;
     }
 
-    .days-row {
+    /* Τίτλος μήνα */
+    #currentDate {
+      margin: 0;
+      font-size: 1.4rem;
+      text-align: center;
+      display: inline-block;
+      transform: translateY(-2px); /* μικρή διόρθωση για οπτική ευθυγράμμιση */
+    }
+
+    /* Header με τις μέρες */
+    .days-grid {
       display: grid;
-      grid-template-columns: repeat(7, 1fr);
+      grid-template-columns: 100px repeat(7, 1fr);
       text-align: center;
       background-color: #222;
-      padding: 0.5rem;
       border-radius: 8px;
       margin-bottom: 1rem;
+      overflow: hidden;
     }
 
-    .days-row div {
-      padding: 0.5rem;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background 0.3s;
+    .days-grid .day-label {
+      padding: 0.8rem 0;
+      font-weight: bold;
+      border-right: 1px solid #333;
+      background-color: #222;
+      color: var(--light);
     }
 
-    .days-row div:hover {
-      background-color: #333;
-    }
-
-    .days-row .today {
+    .days-grid .day-label.today {
       background-color: var(--red);
       color: white;
     }
 
-    /* Time Grid */
-    .time-grid {
+    /* Σώμα ημερολογίου (ώρες + κελιά) */
+    .calendar-body {
       display: grid;
-      grid-template-columns: 100px 1fr;
-      gap: 0.5rem;
+      grid-template-columns: 100px repeat(7, 1fr);
+      border-top: 1px solid #333;
     }
 
-    .times {
+    .time-col {
       display: flex;
       flex-direction: column;
-      text-align: right;
       font-size: 0.9rem;
       color: #aaa;
     }
 
-    .times div {
-      height: 60px;
+    .time-col div {
+      height: 70px;
       display: flex;
       align-items: center;
       justify-content: flex-end;
@@ -134,25 +164,25 @@
       border-bottom: 1px solid #333;
     }
 
-    .slots {
+    .day-col {
       display: flex;
       flex-direction: column;
     }
 
-    .slot {
-      height: 60px;
+    .day-slot {
+      height: 70px;
       border-bottom: 1px solid #333;
+      border-right: 1px solid #333;
       background-color: #181818;
-      border-radius: 4px;
-      margin-bottom: 4px;
-      cursor: pointer;
       transition: background 0.2s;
+      cursor: pointer;
     }
 
-    .slot:hover {
+    .day-slot:hover {
       background-color: #2c2c2c;
     }
 
+    /* Footer */
     footer {
       text-align: center;
       padding: 2rem;
@@ -162,8 +192,8 @@
     }
   </style>
 </head>
-<body>
 
+<body>
   <nav>
     <ul>
       <li><strong>Iron Gym Pilates</strong></li>
@@ -182,15 +212,15 @@
     <div class="calendar-container">
       <div class="calendar-header">
         <button id="prevDay">←</button>
-        <h2 id="currentDate">Σήμερα</h2>
+        <h2 id="currentDate">Δεκέμβριος 2025</h2>
         <button id="nextDay">→</button>
       </div>
 
-      <div class="days-row" id="daysRow"></div>
+      <div class="days-grid" id="daysGrid"></div>
 
-      <div class="time-grid">
-        <div class="times" id="timesColumn"></div>
-        <div class="slots" id="slotsColumn"></div>
+      <div class="calendar-body">
+        <div class="time-col" id="timeCol"></div>
+        <div id="dayColsContainer" style="display: contents;"></div>
       </div>
     </div>
   </main>
@@ -200,59 +230,79 @@
   </footer>
 
   <script>
-    const daysRow = document.getElementById('daysRow');
-    const timesColumn = document.getElementById('timesColumn');
-    const slotsColumn = document.getElementById('slotsColumn');
-    const currentDateLabel = document.getElementById('currentDate');
-    const prevDayBtn = document.getElementById('prevDay');
-    const nextDayBtn = document.getElementById('nextDay');
+    const daysGrid = document.getElementById("daysGrid");
+    const timeCol = document.getElementById("timeCol");
+    const dayColsContainer = document.getElementById("dayColsContainer");
+    const currentDateLabel = document.getElementById("currentDate");
+    const prevDayBtn = document.getElementById("prevDay");
+    const nextDayBtn = document.getElementById("nextDay");
 
     let today = new Date();
     today.setHours(0, 0, 0, 0);
     let currentStartDate = new Date(today);
 
-    function renderDays(startDate) {
-      daysRow.innerHTML = '';
+    /* Δημιουργία ημερολογίου για την εβδομάδα που ξεκινά από startDate */
+    function renderCalendar(startDate) {
+      daysGrid.innerHTML = `<div class="day-label" style="background:#111;color:#aaa;">Ώρα</div>`;
+      dayColsContainer.innerHTML = "";
+
       for (let i = 0; i < 7; i++) {
         const day = new Date(startDate);
         day.setDate(startDate.getDate() + i);
-        const dayDiv = document.createElement('div');
-        dayDiv.textContent = day.toLocaleDateString('el-GR', { weekday: 'short', day: 'numeric' });
-        if (day.getTime() === today.getTime()) dayDiv.classList.add('today');
-        daysRow.appendChild(dayDiv);
+
+        const label = document.createElement("div");
+        label.className = "day-label";
+        label.textContent = day.toLocaleDateString("el-GR", {
+          weekday: "short",
+          day: "numeric",
+        });
+        if (day.getTime() === today.getTime()) {
+          label.classList.add("today");
+        }
+        daysGrid.appendChild(label);
+
+        const dayCol = document.createElement("div");
+        dayCol.classList.add("day-col");
+        for (let h = 9; h <= 21; h++) {
+          const slot = document.createElement("div");
+          slot.classList.add("day-slot");
+          dayCol.appendChild(slot);
+        }
+        dayColsContainer.appendChild(dayCol);
       }
-      currentDateLabel.textContent = startDate.toLocaleDateString('el-GR', { month: 'long', year: 'numeric' });
-      // Disable prev if startDate <= today
+
+      currentDateLabel.textContent = startDate.toLocaleDateString("el-GR", {
+        month: "long",
+        year: "numeric",
+      });
+
       prevDayBtn.disabled = startDate <= today;
     }
 
+    /* Δημιουργία λίστας ωρών */
     function renderTimes() {
-      timesColumn.innerHTML = '';
-      slotsColumn.innerHTML = '';
-      for (let hour = 9; hour <= 21; hour++) {
-        const timeDiv = document.createElement('div');
-        timeDiv.textContent = `${hour}:00`;
-        timesColumn.appendChild(timeDiv);
-
-        const slotDiv = document.createElement('div');
-        slotDiv.classList.add('slot');
-        slotsColumn.appendChild(slotDiv);
+      timeCol.innerHTML = "";
+      for (let h = 9; h <= 21; h++) {
+        const t = document.createElement("div");
+        t.textContent = `${h}:00`;
+        timeCol.appendChild(t);
       }
     }
 
-    prevDayBtn.addEventListener('click', () => {
+    /* Πλοήγηση εβδομάδων */
+    prevDayBtn.addEventListener("click", () => {
       currentStartDate.setDate(currentStartDate.getDate() - 7);
-      renderDays(currentStartDate);
+      renderCalendar(currentStartDate);
     });
 
-    nextDayBtn.addEventListener('click', () => {
+    nextDayBtn.addEventListener("click", () => {
       currentStartDate.setDate(currentStartDate.getDate() + 7);
-      renderDays(currentStartDate);
+      renderCalendar(currentStartDate);
     });
 
-    renderDays(currentStartDate);
+    /* Αρχικό render */
     renderTimes();
+    renderCalendar(currentStartDate);
   </script>
-
 </body>
 </html>
